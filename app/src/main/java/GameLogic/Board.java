@@ -1,4 +1,4 @@
-package chessLogic;
+package GameLogic;
 
 import java.util.ArrayList;
 
@@ -101,6 +101,55 @@ class Board {
 	
 	void insertPiece(Position position, Piece pieceToInsert){
 		board[position.getY()][position.getX()].setPiece(pieceToInsert);
+		pieceToInsert.setPosition(position);
+	}
+	
+	boolean whiteWinsByCheckMate(){
+		boolean whiteWins = true;
+		ArrayList<Position> positionsValids;
+		Position position = null;
+		Piece piece = null;
+		
+		for(int i = 0;i < 8;i++)
+			for(int j = 0;j < 8;j++){
+				piece = board[i][j].getPiece();
+				
+				if(!(piece instanceof NonePiece) && piece.getColor() == Color.BLACK){
+					position = new Position(j,i);
+					positionsValids = getPossibleMoves(position);
+					
+					if(positionsValids.size() > 0){
+						whiteWins = false;
+						break;
+					}		
+				}
+			}
+		
+		return whiteWins;
+	}
+	
+	boolean blackWinsByCheckMate(){
+		boolean blackWins = true;
+		ArrayList<Position> positionsValids;
+		Position position = null;
+		Piece piece = null;
+		
+		for(int i = 0;i < 8;i++)
+			for(int j = 0;j < 8;j++){
+				piece = board[i][j].getPiece();
+				
+				if(!(piece instanceof NonePiece) && piece.getColor() == Color.WHITE){
+					position = new Position(j,i);
+					positionsValids = getPossibleMoves(position);
+			 		
+					if(positionsValids.size() > 0){
+						blackWins = false;
+						break;
+					}		
+				}
+			}
+		
+		return blackWins;
 	}
 	
 	boolean whiteKingIsInCheck(){
@@ -178,7 +227,7 @@ class Board {
 		}
 		
 		return validPositions;
-	}
+	} 
 	
 	Box getBox(Position position){
 		return board[position.getY()][position.getX()];

@@ -1,4 +1,4 @@
-package chessLogic;
+package GameLogic;
 
 enum Color {
 	WHITE, BLACK

@@ -1,20 +1,38 @@
-package chessLogic;
+package GameLogic;
 
 import java.util.ArrayList;
 
 public class ChessGame {
 	
 	private Board board;
-	private Player playerWhite = new Player(Color.WHITE);
-	private Player playerBlack = new Player(Color.BLACK);
 	private boolean isWhiteToPlay = true;
-	
 	
 	public ChessGame(char[][] board){
 		this.board = new Board(board);
 	}
+
+	public ChessGame(){
+		char[][] b = {{'R', 'H', 'B', 'Q', 'K', 'B', 'H', 'R'},
+					{'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+					{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+					{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+					{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+					{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+					{'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+					{'r', 'h', 'b', 'q', 'k', 'b', 'h', 'r'}};
+		this.board = new Board(b);
+	}
 	
 	public ArrayList<Position> getPossibleMoves(Position position){
+		if(board.getBox(position).isEmpty() == true)
+			return new ArrayList<Position>();
+
+		if(isWhiteToPlay == true && board.getBox(position).getPiece().getColor() == Color.BLACK)
+			return new ArrayList<Position>();;
+
+		if(isWhiteToPlay == false && board.getBox(position).getPiece().getColor() == Color.WHITE)
+			return new ArrayList<Position>();
+
 		return board.getPossibleMoves(position);
 	}
 	
@@ -57,6 +75,14 @@ public class ChessGame {
 		return board.blackKingIsInCheck();
 	}
 	
+	public boolean whiteWinsByCheckMate(){
+		return board.whiteWinsByCheckMate();
+	}
+	
+	public boolean blackWinsByCheckMate(){
+		return board.blackWinsByCheckMate();
+	}
+	
 	/**
 	 * Move a piece in chess notation(example: "f3 f6", move the piece in f3 to f6).
 	 * @param move 
@@ -64,9 +90,9 @@ public class ChessGame {
 	 */
 	public boolean move(String move){
 		int iniX = move.charAt(0)-'a';
-		int iniY = move.charAt(1)-'1';
+		int iniY = 8-(move.charAt(1)-'1')-1;
 		int endX = move.charAt(3)-'a';
-		int endY = move.charAt(4)-'1';
+		int endY = 8-(move.charAt(4)-'1')-1;
 		Position iniPosition = new Position(iniX, iniY);
 		Position endPosition = new Position(endX, endY);
 		return move(iniPosition, endPosition);

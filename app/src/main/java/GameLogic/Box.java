@@ -1,4 +1,4 @@
-package chessLogic;
+package GameLogic;
 
 class Box {
 	private Piece piece;

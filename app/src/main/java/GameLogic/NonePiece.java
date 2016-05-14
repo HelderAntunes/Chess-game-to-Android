@@ -1,11 +1,7 @@
-package chessLogic;
+package GameLogic;
 
 class NonePiece extends Piece{
-	
-	NonePiece(Color color){
-		super(color);
-	}
-	
+
 	NonePiece(Color color, Position position){
 		super(color, position);
 	}

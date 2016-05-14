@@ -1,12 +1,8 @@
-package chessLogic;
+package GameLogic;
 
 import java.util.ArrayList;
 
 class Horse extends Piece{
-
-	Horse(Color color){
-		super(color);
-	}
 
 	Horse(Color color, Position position){
 		super(color, position);	
@@ -47,15 +43,7 @@ class Horse extends Piece{
 				validPositions.add(new Position(x+2,y+1));
 		}
 		
-		for(int i = 0;i < validPositions.size();i++){
-			Position position = validPositions.get(i);
-			int yp = position.getY();
-			int xp = position.getX();
-			if(board[yp][xp].isEmpty() == false && board[yp][xp].getPiece().getColor() == this.getColor()){
-				validPositions.remove(i);
-				i--;
-			}
-		}
+		validPositions = new MoveGenerator().removePositionsOccupied(validPositions, board, this);
 			
 		return validPositions;
 	}
