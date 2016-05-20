@@ -1,4 +1,4 @@
-package GameLogic;
+package ChessLogic;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,15 @@ class Board {
 	Board(char[][] board){
 		initialize(board);
 	}
-	
+
+	Board(char[][] board, boolean WhiteKingMoved, boolean blackKingMoved){
+		initialize(board);
+		Position whiteKingPosition = this.findWhiteKing();
+		Position blakKingPosition = this.findBlackKing();
+		((King)this.board[whiteKingPosition.getY()][whiteKingPosition.getX()].getPiece()).setMoved(WhiteKingMoved);
+		((King)this.board[blakKingPosition.getY()][blakKingPosition.getX()].getPiece()).setMoved(blackKingMoved);
+	}
+
 	void initialize(char[][] board){
 		for(int i = 0;i < board.length;i++)
 			for(int j = 0;j < board.length;j++){
@@ -72,7 +80,7 @@ class Board {
 				this.board[i][j] = new Box(piece, colorBoard);
 			}
 	}
-	
+
 	char[][] getBoard(){
 		char[][] boardChar = new char[8][8];
 		for(int i = 0;i < 8;i++)
@@ -92,69 +100,90 @@ class Board {
 		Piece pieceToMove = board[iniPosition.getY()][iniPosition.getX()].getPiece();
 		removePiece(iniPosition);
 		insertPiece(endPosition, pieceToMove);
+
+		if(pieceToMove instanceof King){
+
+			// castling
+			if(endPosition.getX() == iniPosition.getX()+2){
+				Position oldRookPosition = new Position(iniPosition.getX()+3, iniPosition.getY());
+				Position newRookPosition = new Position(iniPosition.getX()+1, iniPosition.getY());
+				move(oldRookPosition, newRookPosition);
+			}
+			else if(endPosition.getX() == iniPosition.getX()-2){
+				Position oldRookPosition = new Position(iniPosition.getX()-4, iniPosition.getY());
+				Position newRookPosition = new Position(iniPosition.getX()-1, iniPosition.getY());
+				move(oldRookPosition, newRookPosition);
+			}
+
+			((King)pieceToMove).setMoved(true);
+		}
+
+		if(pieceToMove instanceof Rook){
+			((Rook)pieceToMove).setMoved(true);
+		}
 	}
-	
+
 	void removePiece(Position position){
 		Color color = board[position.getY()][position.getX()].getColor();
 		board[position.getY()][position.getX()].setPiece(new NonePiece(color, position));
 	}
-	
+
 	void insertPiece(Position position, Piece pieceToInsert){
 		board[position.getY()][position.getX()].setPiece(pieceToInsert);
 		pieceToInsert.setPosition(position);
 	}
-	
+
 	boolean whiteWinsByCheckMate(){
 		boolean whiteWins = true;
 		ArrayList<Position> positionsValids;
 		Position position = null;
 		Piece piece = null;
-		
+
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
 				piece = board[i][j].getPiece();
-				
+
 				if(!(piece instanceof NonePiece) && piece.getColor() == Color.BLACK){
 					position = new Position(j,i);
 					positionsValids = getPossibleMoves(position);
-					
+
 					if(positionsValids.size() > 0){
 						whiteWins = false;
 						break;
 					}		
 				}
 			}
-		
+
 		return whiteWins;
 	}
-	
+
 	boolean blackWinsByCheckMate(){
 		boolean blackWins = true;
 		ArrayList<Position> positionsValids;
 		Position position = null;
 		Piece piece = null;
-		
+
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
 				piece = board[i][j].getPiece();
-				
+
 				if(!(piece instanceof NonePiece) && piece.getColor() == Color.WHITE){
 					position = new Position(j,i);
 					positionsValids = getPossibleMoves(position);
-			 		
+
 					if(positionsValids.size() > 0){
 						blackWins = false;
 						break;
 					}		
 				}
 			}
-		
+
 		return blackWins;
 	}
-	
+
 	boolean whiteKingIsInCheck(){
 		Position whiteKingPos = findWhiteKing();
-		
+
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
 				Piece piece = board[i][j].getPiece();
@@ -165,13 +194,13 @@ class Board {
 					if(position.equals(whiteKingPos))
 						return true;
 			}
-		
+
 		return false;
 	}
-	
+
 	boolean blackKingIsInCheck(){
 		Position blackKingPos = findBlackKing();
-		
+
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
 				Piece piece = board[i][j].getPiece();
@@ -182,10 +211,10 @@ class Board {
 					if(position.equals(blackKingPos))
 						return true;
 			}
-		
+
 		return false;
 	}
-	
+
 	Position findWhiteKing(){
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
@@ -195,7 +224,7 @@ class Board {
 			}
 		return null;
 	}
-	
+
 	Position findBlackKing(){
 		for(int i = 0;i < 8;i++)
 			for(int j = 0;j < 8;j++){
@@ -205,30 +234,38 @@ class Board {
 			}
 		return null;
 	}
-	
+
 	ArrayList<Position> getPossibleMoves(Position position){
 		ArrayList<Position> validPositions = board[position.getY()][position.getX()].getPiece().getPossibleMoves(board);
 		Piece piece = board[position.getY()][position.getX()].getPiece();
-		
+
 		for(int i = 0;i < validPositions.size();i++){
 			Position newPosition = validPositions.get(i);
-			Board newBoard = new Board(this.getBoard());
+			Board newBoard = copyBoard();
 			newBoard.move(position, newPosition);
-			
+
 			if(newBoard.blackKingIsInCheck() && piece.getColor() == Color.BLACK){
 				validPositions.remove(i);
 				i--;
 			}
-			
+
 			if(newBoard.whiteKingIsInCheck() && piece.getColor() == Color.WHITE){
 				validPositions.remove(i);
 				i--;
 			}
 		}
-		
+
 		return validPositions;
 	} 
 	
+	Board copyBoard(){
+		Position whiteKingPosition = this.findWhiteKing();
+		Position blakKingPosition = this.findBlackKing();
+		boolean whiteKingMoved = ((King)this.board[whiteKingPosition.getY()][whiteKingPosition.getX()].getPiece()).wasMoved();
+		boolean blackKingMoved = ((King)this.board[blakKingPosition.getY()][blakKingPosition.getX()].getPiece()).wasMoved();
+		return new Board(this.getBoard(), whiteKingMoved, blackKingMoved);
+	}
+
 	Box getBox(Position position){
 		return board[position.getY()][position.getX()];
 	}

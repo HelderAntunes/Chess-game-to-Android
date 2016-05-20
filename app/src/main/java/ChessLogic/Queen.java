@@ -1,19 +1,20 @@
-package GameLogic;
+package ChessLogic;
 
 import java.util.ArrayList;
 
-class Bishop extends Piece{
+class Queen extends Piece{
 
-	Bishop(Color color, Position position){
+	Queen(Color color, Position position){
 		super(color, position);
 	}
 
 	public String toString(){
-		return "B";
+		return "Q";
 	}
 
 	ArrayList<Position> getPossibleMoves(Box board[][]){
 		ArrayList<Position> validPositions = new MoveGenerator().getDiagonalMoves(board, this);
+		validPositions.addAll(new MoveGenerator().getVerticalAndHorizontalMoves(board, this));
 		return validPositions;
 	}
 

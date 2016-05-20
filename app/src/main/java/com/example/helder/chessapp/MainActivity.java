@@ -8,13 +8,14 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
 
-import GameLogic.ChessGame;
-import GameLogic.Position;
+import ChessLogic.ChessGame;
+import ChessLogic.Position;
 
 
 public class MainActivity extends AppCompatActivity {

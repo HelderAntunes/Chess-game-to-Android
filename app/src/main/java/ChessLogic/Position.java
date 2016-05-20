@@ -1,4 +1,4 @@
-package GameLogic;
+package ChessLogic;
 
 public class Position {
 	int x;
@@ -22,5 +22,10 @@ public class Position {
 			return true;
 		else
 			return false;
+	}
+	
+	public void setXY(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
 }

@@ -1,4 +1,4 @@
-package GameLogic;
+package ChessLogic;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,7 @@ class Piece {
 	Piece(Color color, Position position){
 		this.color = color;
 		this.position = position;
-	}
+	};
 	
 	public String toString(){
 		return " ";

@@ -1,4 +1,4 @@
-package GameLogic;
+package ChessLogic;
 
 class NonePiece extends Piece{
 
