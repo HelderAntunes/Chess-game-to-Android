@@ -1,6 +1,7 @@
 package com.example.helder.chessapp;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         int widthBox;
         int startX;
         int startY;
+        int widthScreen;
+        int heightScreen;
 
         protected void onDraw(Canvas canvas)
         {
@@ -46,11 +50,13 @@ public class MainActivity extends AppCompatActivity {
             p = new Paint();
             Rect r = new Rect();
             Bitmap b1;
+
             char [][]board = game.getBoard();
             for(int i = 0;i < possibleMoves.size();i++){
                 Position pos = possibleMoves.get(i);
                 board[pos.getY()][pos.getX()] = 'X';
             }
+
             for(int i = 0;i < 8;i++){
                 for(int j = 0;j < 8;j++){
                     r.set(startX+j*widthBox,startY+i*widthBox,startX+j*widthBox+widthBox,startY+i*widthBox+widthBox);
@@ -59,6 +65,13 @@ public class MainActivity extends AppCompatActivity {
                     canvas.drawBitmap(b1, null, r, p);
                 }
             }
+
+            b1 = BitmapFactory.decodeResource(getResources(), R.drawable.noneinformation);
+            r.set(0, 8*widthBox, widthScreen, heightScreen);
+            canvas.drawBitmap(b1, null, r, p);
+            b1 = selectBmpInformation();
+            r.set(0, 8*widthBox, widthScreen, 8*widthBox+70);
+            canvas.drawBitmap(b1, null, r, p);
         }
 
         boolean boxIsWhite(int i, int j){
@@ -71,6 +84,21 @@ public class MainActivity extends AppCompatActivity {
                 if(j%2 == 0)
                     return false;
                 return true;
+            }
+        }
+
+        Bitmap selectBmpInformation(){
+            if(game.blackWinsByCheckMate()){
+                return BitmapFactory.decodeResource(getResources(), R.drawable.blackwins);
+            }
+            else if(game.whiteWinsByCheckMate()){
+                return BitmapFactory.decodeResource(getResources(), R.drawable.whitewins);
+            }
+            else if(game.blackIsInCheck() || game.whiteIsInCheck()){
+                return BitmapFactory.decodeResource(getResources(), R.drawable.check);
+            }
+            else{
+                return BitmapFactory.decodeResource(getResources(), R.drawable.noneinformation);
             }
         }
 
@@ -148,17 +176,18 @@ public class MainActivity extends AppCompatActivity {
         public BoardView(Context context)
         {
             super(context);
+
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-            if(width < height*0.75) {
-                widthBox = width / 8;
+            widthScreen = size.x;
+            heightScreen = size.y;
+            if(widthScreen < heightScreen*0.75) {
+                widthBox = widthScreen / 8;
             }
             else{
-                widthBox = height*3/4/8;
+                widthBox = heightScreen*3/4/8;
             }
             startX = 0;
             startY = 0;
@@ -171,8 +200,10 @@ public class MainActivity extends AppCompatActivity {
             float x = event.getX();
             float y = event.getY();
             if(x >= startX && x <= startX+widthBox*7+widthBox && y >= startY && y <= startY+7*widthBox+widthBox){
+
                 int j = (int)(x-startX)/widthBox;
                 int i = (int)(y-startY)/widthBox;
+
                 for(int k = 0;k < possibleMoves.size();k++){
                     int u = possibleMoves.get(k).getY();
                     int v = possibleMoves.get(k).getX();
@@ -183,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 }
+
                 currPos = new Position(j,i);
                 possibleMoves = game.getPossibleMoves(currPos);
             }
