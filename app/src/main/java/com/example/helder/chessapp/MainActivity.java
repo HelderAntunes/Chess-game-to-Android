@@ -5,12 +5,15 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -33,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         ChessGame game = new ChessGame();
         ArrayList<Position> possibleMoves = new ArrayList<Position>();
         Position currPos = new Position(0,0);
-        int widthBox = 52;
-        int startX = 30;
+        int widthBox;
+        int startX = 0;
         int startY = 50;
 
         protected void onDraw(Canvas canvas)
@@ -145,6 +148,16 @@ public class MainActivity extends AppCompatActivity {
         public BoardView(Context context)
         {
             super(context);
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+            if(width < height)
+                widthBox = width/8;
+            else
+                widthBox = height/8;
         }
 
         @Override
