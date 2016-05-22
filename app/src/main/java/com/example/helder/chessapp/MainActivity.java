@@ -37,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Position> possibleMoves = new ArrayList<Position>();
         Position currPos = new Position(0,0);
         int widthBox;
-        int startX = 0;
-        int startY = 50;
+        int startX;
+        int startY;
 
         protected void onDraw(Canvas canvas)
         {
@@ -154,10 +154,14 @@ public class MainActivity extends AppCompatActivity {
             display.getSize(size);
             int width = size.x;
             int height = size.y;
-            if(width < height)
-                widthBox = width/8;
-            else
-                widthBox = height/8;
+            if(width < height*0.75) {
+                widthBox = width / 8;
+            }
+            else{
+                widthBox = height*3/4/8;
+            }
+            startX = 0;
+            startY = 0;
         }
 
         @Override
