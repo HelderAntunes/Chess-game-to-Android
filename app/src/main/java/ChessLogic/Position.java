@@ -1,4 +1,4 @@
-package ChessLogic;
+package chessLogic;
 
 public class Position {
 	int x;

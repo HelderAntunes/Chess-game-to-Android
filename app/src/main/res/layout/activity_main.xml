@@ -9,4 +9,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.helder.chessapp.MainActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Novo jogo"
+        android:id="@+id/buttonNewGame"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Carregar jogo"
+        android:id="@+id/buttonLoadingGame"
+        android:layout_below="@+id/buttonNewGame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp" />
 </RelativeLayout>

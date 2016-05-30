@@ -1,4 +1,4 @@
-package ChessLogic;
+package chessLogic;
 
 import java.util.ArrayList;
 
@@ -101,6 +101,10 @@ public class ChessGame {
 	
 	public char[][] getBoard(){
 		return board.getBoard();
+	}
+
+	public boolean isWhiteToPlay(){
+		return isWhiteToPlay;
 	}
 
 }
