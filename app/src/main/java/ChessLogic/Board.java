@@ -11,11 +11,11 @@ class Board {
 		initialize(board);
 	}
 
-	Board(char[][] board, boolean WhiteKingMoved, boolean blackKingMoved){
+	Board(char[][] board, boolean whiteKingMoved, boolean blackKingMoved){
 		initialize(board);
 		Position whiteKingPosition = this.findWhiteKing();
 		Position blakKingPosition = this.findBlackKing();
-		((King)this.board[whiteKingPosition.getY()][whiteKingPosition.getX()].getPiece()).setMoved(WhiteKingMoved);
+		((King)this.board[whiteKingPosition.getY()][whiteKingPosition.getX()].getPiece()).setMoved(whiteKingMoved);
 		((King)this.board[blakKingPosition.getY()][blakKingPosition.getX()].getPiece()).setMoved(blackKingMoved);
 	}
 
@@ -268,6 +268,16 @@ class Board {
 
 	Box getBox(Position position){
 		return board[position.getY()][position.getX()];
+	}
+
+	boolean whiteKingMoved(){
+		Position whiteKingPosition = this.findWhiteKing();
+		return ((King)this.board[whiteKingPosition.getY()][whiteKingPosition.getX()].getPiece()).wasMoved();
+	}
+
+	boolean blackKingMoved(){
+		Position blakKingPosition = this.findBlackKing();
+		return ((King)this.board[blakKingPosition.getY()][blakKingPosition.getX()].getPiece()).wasMoved();
 	}
 
 }

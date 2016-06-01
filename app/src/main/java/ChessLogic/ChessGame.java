@@ -2,13 +2,18 @@ package chessLogic;
 
 import java.util.ArrayList;
 
-public class ChessGame {
+public class ChessGame{
 	
 	private Board board;
 	private boolean isWhiteToPlay = true;
 	
 	public ChessGame(char[][] board){
 		this.board = new Board(board);
+	}
+
+	public ChessGame(char[][] board, boolean WhiteKingMoved, boolean blackKingMoved, boolean isWhiteToPlay){
+		this.board = new Board(board, WhiteKingMoved, blackKingMoved);
+		this.isWhiteToPlay = isWhiteToPlay;
 	}
 
 	public ChessGame(){
@@ -107,4 +112,11 @@ public class ChessGame {
 		return isWhiteToPlay;
 	}
 
+	public boolean whiteKingMoved(){
+		return board.whiteKingMoved();
+	}
+
+	public boolean blackKingMoved(){
+		return board.blackKingMoved();
+	}
 }
