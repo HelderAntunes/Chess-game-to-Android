@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Chessapp.iml" filepath="$PROJECT_DIR$/Chessapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LPOO-chessToAndroid.iml" filepath="$PROJECT_DIR$/LPOO-chessToAndroid.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

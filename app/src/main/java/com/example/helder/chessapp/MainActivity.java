@@ -13,8 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import chessLogic.ChessGame;
-
 
 public class MainActivity extends AppCompatActivity{
 
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
 
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.mainActivityLayoutId);
-        rl.setBackgroundColor(Color.BLACK);
 
         newGameButton = (Button) findViewById(R.id.buttonNewGame) ;
         newGameButton.setOnClickListener( new View.OnClickListener() {
@@ -36,6 +33,7 @@ public class MainActivity extends AppCompatActivity{
                 MainActivity.this.onNewGameButtonClick(v);
             }
         });
+        newGameButton.getBackground().setAlpha(150);
 
         loadGameButton = (Button) findViewById(R.id.buttonLoadingGame) ;
         loadGameButton.setOnClickListener( new View.OnClickListener() {
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
                 MainActivity.this.onLoadingGameButtonClick(v);
             }
         });
+        loadGameButton.getBackground().setAlpha(150);
     }
 
     public void onNewGameButtonClick(View view) {
